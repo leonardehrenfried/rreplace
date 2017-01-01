@@ -21,7 +21,6 @@ fn main() {
     for path in gitignore_file.included_files().unwrap().iter()
         .map(|p| pwd.join(&p))
         .filter(|p| metadata(&p).unwrap().is_file()) {
-        println!("{}", path.display());
 
         // Open the path in read-only mode, returns `io::Result<File>`
         let mut file = match File::open(&path) {
@@ -34,19 +33,22 @@ fn main() {
         // Read the file contents into a string, returns `io::Result<usize>`
         let mut s = String::new();
         match file.read_to_string(&mut s) {
-            Err(why) => {
-                println!("skipped {}: {}", path.display(), why.description())
+            Err(_) => {
+                //println!("skipped {}: {}", path.display(), why.description())
             }
             Ok(_) => {
-                // Open and read the file entirely
                 drop(file);  // Close the file early
 
-                // Run replace operation in memory
-                let new_data = s.replace(&*params.to_replace, &*params.replace_with);
+                if s.contains(&*params.to_replace) {
+                    // Run replace operation in memory
+                    let new_data = s.replace(&*params.to_replace, &*params.replace_with);
 
-                // Recreate the file and dump the processed contents to it
-                let mut f = File::create(&path).expect("Unable to create file");
-                f.write_all(new_data.as_bytes()).expect("Unable to write data");
+                    println!("Editing {}", path.display());
+
+                    // Recreate the file and dump the processed contents to it
+                    let mut f = File::create(&path).expect("Unable to create file");
+                    f.write_all(new_data.as_bytes()).expect("Unable to write data");
+                }
             }
         }
     }
