@@ -12,11 +12,8 @@ fn main() {
     let path = Path::new("hello.txt");
     let display = path.display();
 
-    for entry in glob("**/*").expect("Failed to read glob pattern") {
-        match entry {
-            Ok(path) => println!("{:?}", path.display()),
-            Err(e) => println!("{:?}", e),
-        }
+    for path in glob("**/*").unwrap().filter_map(Result::ok).filter(|x| !x.starts_with(".git")) {
+        println!("{}", path.display());
     }
 
     // Open the path in read-only mode, returns `io::Result<File>`
