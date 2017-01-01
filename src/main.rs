@@ -6,9 +6,7 @@ use std::path::Path;
 use std::env;
 use std::fs::metadata;
 
-extern crate glob;
 extern crate gitignore;
-use glob::glob;
 
 fn main() {
     // Create a path to the desired file
@@ -23,11 +21,9 @@ fn main() {
     let ref to_replace = args[1];
     let ref replace_with = args[2];
 
-    for path in glob("**/*").unwrap()
-        .filter_map(Result::ok)
+    for path in gitignore_file.included_files().unwrap().iter()
         .map(|p| pwd.join(&p))
-        .filter(|p| metadata(&p).unwrap().is_file())
-        .filter(|p| !gitignore_file.is_excluded(&p).unwrap()) {
+        .filter(|p| metadata(&p).unwrap().is_file()) {
         println!("{}", path.display());
 
         // Open the path in read-only mode, returns `io::Result<File>`
@@ -42,8 +38,9 @@ fn main() {
         // Read the file contents into a string, returns `io::Result<usize>`
         let mut s = String::new();
         match file.read_to_string(&mut s) {
-            Err(why) => panic!("couldn't read {}: {}", display,
-                                                       why.description()),
+            Err(why) => {
+                println!("skipped {}: {}", display, why.description())
+            }
             Ok(_) => {
                 // Open and read the file entirely
                 drop(file);  // Close the file early
