@@ -3,8 +3,10 @@ use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use std::env;
 
 extern crate glob;
+extern crate gitignore;
 use glob::glob;
 
 fn main() {
@@ -12,7 +14,14 @@ fn main() {
     let path = Path::new("hello.txt");
     let display = path.display();
 
-    for path in glob("**/*").unwrap().filter_map(Result::ok).filter(|x| !x.starts_with(".git")) {
+    let pwd = env::current_dir().unwrap();
+    let gitignore_path = pwd.join(".gitignore");
+    let gitignore_file = gitignore::File::new(&gitignore_path).unwrap();
+
+    for path in glob("**/*").unwrap()
+        .filter_map(Result::ok)
+        .map(|p| pwd.join(&p))
+        .filter(|p| !gitignore_file.is_excluded(&p).unwrap()) {
         println!("{}", path.display());
     }
 

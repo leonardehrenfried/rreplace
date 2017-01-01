@@ -2,6 +2,15 @@
 name = "search_replace"
 version = "0.1.0"
 dependencies = [
+ "gitignore 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glob 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "gitignore"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
  "glob 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -11,4 +20,5 @@ version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
+"checksum gitignore 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)" = "8211a3fb943a9bdd91d037909d1d005b68b6a0356913f3b518ea477ad8a189fa"
 "checksum glob 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)" = "8be18de09a56b60ed0edf84bc9df007e30040691af7acd1c41874faac5895bfb"
