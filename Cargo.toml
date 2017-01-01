@@ -5,3 +5,7 @@ authors = ["Leonard Ehrenfried <leonard.ehrenfried@gmail.com>"]
 
 [dependencies]
 gitignore = "1.0.5"
+
+[dependencies.clap]
+version = "2.19.3"
+default-features = false
