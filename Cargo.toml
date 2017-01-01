@@ -1,0 +1,7 @@
+[package]
+name = "search_replace"
+version = "0.1.0"
+authors = ["Leonard Ehrenfried <leonard.ehrenfried@gmail.com>"]
+
+[dependencies]
+glob = "0.2.11"
