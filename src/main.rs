@@ -40,7 +40,17 @@ fn main() {
         match file.read_to_string(&mut s) {
             Err(why) => panic!("couldn't read {}: {}", display,
                                                        why.description()),
-            Ok(_) => print!("{} contains:\n{}", display, s.replace("bar", "quox")),
+            Ok(_) => {
+                // Open and read the file entirely
+                drop(file);  // Close the file early
+
+                // Run replace operation in memory
+                let new_data = s.replace("bar", "bar");
+
+                // Recreate the file and dump the processed contents to it
+                let mut f = File::create(&path).expect("Unable to create file");
+                f.write_all(new_data.as_bytes()).expect("Unable to write data");
+            }
         }
     }
 
