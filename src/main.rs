@@ -5,22 +5,21 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::env;
 use std::fs::metadata;
+use std::path::{Path, PathBuf};
 
 extern crate gitignore;
 extern crate clap;
+extern crate glob;
 
+use glob::{glob, Paths};
 use clap::{App, Arg, ArgMatches};
 
 fn main() {
     let pwd = env::current_dir().unwrap();
-    let gitignore_path = pwd.join(".gitignore");
-    let gitignore_file = gitignore::File::new(&gitignore_path).unwrap();
-
     let params = parse_arguments();
 
-    for path in gitignore_file.included_files().unwrap().iter()
-        .map(|p| pwd.join(&p))
-        .filter(|p| metadata(&p).unwrap().is_file()) {
+    for path in get_files()
+         {
 
         // Open the path in read-only mode, returns `io::Result<File>`
         let mut file = match File::open(&path) {
@@ -52,8 +51,18 @@ fn main() {
             }
         }
     }
+}
 
-    // `file` goes out of scope, and the "hello.txt" file gets closed
+fn get_files(){
+    let pwd = env::current_dir().unwrap();
+    let gitignore_path = pwd.join(".gitignore");
+
+    let files = match gitignore::File::new(&gitignore_path) {
+        Err(_) => glob("**/*").expect("Failed to read glob pattern").map(|x| x.unwrap()),
+        Ok(g)  => g.included_files().expect("Failed to read .gitignore").iter()
+    };
+
+    files.map(|p| pwd.join(p)).filter(|p| metadata(p).unwrap().is_file())
 }
 
 struct Params {
