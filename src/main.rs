@@ -5,21 +5,19 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::env;
 use std::fs::metadata;
-use std::path::{Path, PathBuf};
+use std::path::{PathBuf};
 
 extern crate gitignore;
 extern crate clap;
 extern crate glob;
 
-use glob::{glob, Paths};
+use glob::{glob, GlobResult};
 use clap::{App, Arg, ArgMatches};
 
 fn main() {
-    let pwd = env::current_dir().unwrap();
     let params = parse_arguments();
 
-    for path in get_files()
-         {
+    for path in get_files() {
 
         // Open the path in read-only mode, returns `io::Result<File>`
         let mut file = match File::open(&path) {
@@ -53,16 +51,17 @@ fn main() {
     }
 }
 
-fn get_files(){
+fn get_files() -> Vec<PathBuf> {
     let pwd = env::current_dir().unwrap();
     let gitignore_path = pwd.join(".gitignore");
+    fn unwrap(r: GlobResult) -> PathBuf { r.unwrap() }
 
-    let files = match gitignore::File::new(&gitignore_path) {
-        Err(_) => glob("**/*").expect("Failed to read glob pattern").map(|x| x.unwrap()),
-        Ok(g)  => g.included_files().expect("Failed to read .gitignore").iter()
+    let files: Vec<PathBuf> = match gitignore::File::new(&gitignore_path) {
+        Err(_) => glob("**/*").expect("Failed to read glob pattern").map(unwrap).collect::<Vec<PathBuf>>(),
+        Ok(g)  => g.included_files().expect("Failed to read .gitignore")
     };
 
-    files.map(|p| pwd.join(p)).filter(|p| metadata(p).unwrap().is_file())
+    files.iter().map(|p| pwd.join(p)).filter(|p| metadata(p).unwrap().is_file()).collect()
 }
 
 struct Params {
