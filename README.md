@@ -1,16 +1,16 @@
-# search_replace
+# rreplace
 Recursively search and replace strings in text files
 
 This program searches through a tree of (text) files and replaces all occurances of a string with another one. Think of 
 it as a combination of `grep` and `sed`.
 
 ```
-$ search_replace --help
-search_replace 0.1.0
+$ rreplace --help
+rreplace 0.1.0
 Leonard Ehrenfried <leonard.ehrenfried@gmail.com>
 
 USAGE:
-    search_replace <to_replace> <replace_with>
+    rreplace <to_replace> <replace_with>
 
 FLAGS:
     -h, --help       Prints help information

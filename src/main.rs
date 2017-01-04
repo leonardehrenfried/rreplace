@@ -74,7 +74,7 @@ fn unwrap_arg(matches: &ArgMatches, name: &str) -> String {
 }
 
 fn parse_arguments() -> Params {
-    let x = App::new("search_replace")
+    let x = App::new("rreplace")
         .version(env!("CARGO_PKG_VERSION"))
         .author("Leonard Ehrenfried <leonard.ehrenfried@gmail.com>")
 

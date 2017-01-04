@@ -1,5 +1,5 @@
 [package]
-name = "search_replace"
+name = "rreplace"
 version = "0.1.0"
 authors = ["Leonard Ehrenfried <leonard.ehrenfried@gmail.com>"]
 
