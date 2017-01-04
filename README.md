@@ -1,6 +1,8 @@
 # rreplace
 Recursively search and replace strings in text files
 
+[![Build Status](https://travis-ci.org/leonardehrenfried/rreplace.svg?branch=master)](https://travis-ci.org/leonardehrenfried/rreplace)
+
 This program searches through a tree of (text) files and replaces all occurances of a string with another one. Think of 
 it as a combination of `grep` and `sed`.
 
