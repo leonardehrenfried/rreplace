@@ -40,7 +40,10 @@ fn main() {
                     // Run replace operation in memory
                     let new_data = s.replace(&*params.to_replace, &*params.replace_with);
 
-                    println!("Editing {}", path.display());
+                    let pwd = env::current_dir().unwrap();
+                    let full_path = path.display().to_string();
+                    let relative_path = full_path.trim_left_matches(pwd.to_str().unwrap()).trim_left_matches("/");
+                    println!("Editing {}", relative_path);
 
                     // Recreate the file and dump the processed contents to it
                     let mut f = File::create(&path).expect("Unable to create file");
