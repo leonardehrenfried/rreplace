@@ -1,6 +1,4 @@
-#![deny(warnings)]
 // open.rs
-use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::env;
@@ -23,7 +21,7 @@ fn main() {
         let mut file = match File::open(&path) {
             // The `description` method of `io::Error` returns a string that
             // describes the error
-            Err(why) => panic!("couldn't open {}: {}", path.display(), why.description()),
+            Err(why) => panic!("couldn't open {}: {}", path.display(), why.to_string()),
             Ok(file) => file,
         };
 
@@ -42,7 +40,7 @@ fn main() {
 
                     let pwd = env::current_dir().unwrap();
                     let full_path = path.display().to_string();
-                    let relative_path = full_path.trim_left_matches(pwd.to_str().unwrap()).trim_left_matches("/");
+                    let relative_path = full_path.trim_start_matches(pwd.to_str().unwrap()).trim_start_matches("/");
                     println!("Editing {}", relative_path);
 
                     // Recreate the file and dump the processed contents to it
