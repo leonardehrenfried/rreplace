@@ -71,7 +71,7 @@ struct Params {
 }
 
 fn unwrap_arg(matches: &ArgMatches, name: &str) -> String {
-    matches.args.get(name).unwrap().vals[1].clone().into_string().unwrap()
+    matches.args.get(name).unwrap().vals[0].clone().into_string().unwrap()
 }
 
 fn parse_arguments() -> Params {
